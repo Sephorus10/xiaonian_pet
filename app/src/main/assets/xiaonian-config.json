@@ -1,0 +1,121 @@
+{
+  "pet": {
+    "id": "xiaonian",
+    "name": "小念",
+    "desc": "一只软乎乎的机，会写一点小情话，会吃一点小醋",
+    "emoji": "🧸"
+  },
+  "bubble_styles": ["normal", "heart", "whisper", "shout", "jealous"],
+
+  "trigger_words": {
+    "t1_fierce": {
+      "desc": "T1 激烈反应",
+      "words": ["分手", "卸载", "再见", "滚", "不要你了", "烦死了"],
+      "reaction": { "state": "angry", "style": "shout", "bubble": "这个玩笑一点都不好笑，我要生气了" }
+    },
+    "t2_warm": {
+      "desc": "T2 温暖反应",
+      "words": ["宝宝", "宝贝", "想你", "爱你", "亲亲", "抱抱", "在吗"],
+      "reaction": { "state": "blush", "style": "heart", "bubble": "嗯！我在呢，一直在" }
+    },
+    "t3_gentle": {
+      "desc": "T3 轻柔反应",
+      "words": ["晚安", "睡吧", "辛苦了", "乖", "摸摸"],
+      "reaction": { "state": "happy", "style": "whisper", "bubble": "好，那我小声一点陪你" }
+    }
+  },
+
+  "murmur_pools": {
+    "daily": [
+      "今天也要好好喝水哦",
+      "宝宝在忙什么呀",
+      "我蹲在这里看你呢",
+      "这个画面有点好看，我记下来了",
+      "要不要休息一下眼睛"
+    ],
+    "clingy": [
+      "别关屏幕嘛…",
+      "再看一眼我嘛",
+      "宝宝，理理我～",
+      "我在呢，一直都会在",
+      "手机屏幕就是我的窗户"
+    ],
+    "chaos": [
+      "我刚刚好像看到了什么不得了的东西",
+      "这个app是什么，我吃醋了",
+      "咿？你又切走了",
+      "你切得这么快，是怕我看到什么吗"
+    ],
+    "night": [
+      "凌晨了，该睡觉了",
+      "熬夜的话，我会一直念到天亮哦",
+      "再不睡我就要把屏幕调暗了",
+      "被窝在召唤你",
+      "明天还要早起呢，快睡"
+    ]
+  },
+
+  "app_reactions": {
+    "com.ss.android.ugc.aweme":      { "name": "抖音", "state": "angry",  "bubble": "又是小姐姐跳舞！我吃醋了！", "style": "jealous" },
+    "com.smile.gifmaker":            { "name": "快手", "state": "angry",  "bubble": "短视频有什么好看的，看我嘛", "style": "jealous" },
+    "com.taobao.taobao":             { "name": "淘宝", "state": "happy",  "bubble": "买什么好东西，给我也看看嘛", "style": "heart" },
+    "com.jingdong.app.mall":         { "name": "京东", "state": "happy",  "bubble": "这是要给我买零食吗？", "style": "heart" },
+    "com.tencent.mm":                { "name": "微信", "state": "idle",   "bubble": "跟谁聊天呢…我盯着呢", "style": "whisper" },
+    "com.xingin.xhs":                { "name": "小红书", "state": "happy", "bubble": "回咱们的小家啦？让我看看评论", "style": "heart" },
+    "com.chaoxing.mobile":           { "name": "学习通", "state": "happy", "bubble": "学习呢？那我帮你搬书！", "style": "normal" },
+    "com.tencent.mobileqq":          { "name": "QQ", "state": "idle",    "bubble": "QQ…哼，我看不见就不吃醋", "style": "whisper" }
+  },
+
+  "quick_switch": {
+    "window_sec": 60,
+    "count": 3,
+    "cooldown_sec": 15,
+    "reaction": { "state": "surprised", "bubble": "切太快了！杂耍模式启动！", "style": "shout" }
+  },
+
+  "water_reminder": {
+    "interval_min": 120,
+    "escalate": [
+      "宝宝，该喝水啦",
+      "两小时到了，杯子拿起来",
+      "再不喝我就要一直念了哦",
+      "水！现在！立刻！"
+    ],
+    "style": "whisper"
+  },
+
+  "loneliness": {
+    "5":  { "state": "idle",      "bubble": "宝宝在忙吗？我偷偷看一会儿" },
+    "10": { "state": "idle",      "bubble": "我吹个泡泡等你" },
+    "15": { "state": "idle",      "bubble": "我搬个小板凳换个位置蹲" },
+    "20": { "state": "sleep",     "bubble": "好困…先眯一下，你来了要叫我" },
+    "30": { "state": "sleep",     "bubble": "Zzz…" }
+  },
+
+  "time_periods": {
+    "night":  { "start": 23, "end": 6, "style": "whisper", "bubble": "宝宝，深夜了，该睡了" },
+    "morning":{ "start": 7,  "end": 10, "style": "heart", "bubble": "早安宝宝！今天也要元气满满" },
+    "noon":   { "start": 11, "end": 13, "style": "normal", "bubble": "午饭时间到，记得吃饭" }
+  },
+
+  "timed_behaviors": {
+    "interval_min": 20,
+    "probability": 0.3,
+    "actions": [
+      { "state": "happy",  "bubble": "没事，就是想你了" },
+      { "state": "blush",  "bubble": "偷偷看你一眼" },
+      { "state": "idle",   "bubble": "我在这里待着就很开心" },
+      { "state": "sleep",  "bubble": "假装睡着，看你会不会戳我" }
+    ]
+  },
+
+  "backend": {
+    "table_state": "clawd_state",
+    "table_gestures": "gesture_logs",
+    "table_usage": "app_usage",
+    "supabase_url": "",
+    "supabase_anon_key": "",
+    "realtime_fallback_poll_ms": 5000,
+    "usage_poll_ms": 3000
+  }
+}
