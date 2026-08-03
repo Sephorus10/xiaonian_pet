@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>小念 · 桌宠渲染层</title>
+<style>
+  html, body { margin: 0; padding: 0; background: transparent; overflow: hidden; width: 100%; height: 100%; }
+  * { -webkit-tap-highlight-color: transparent; user-select: none; }
+
+  /* ===== 小念本体 ===== */
+  #pet {
+    position: absolute;
+    left: 50%; bottom: 4%;
+    width: 82%;
+    transform: translateX(-50%);
+    animation: bob 3.2s ease-in-out infinite;
+    cursor: grab;
+  }
+  @keyframes bob {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50%      { transform: translateX(-50%) translateY(-6px); }
+  }
+  #pet:active { cursor: grabbing; }
+
+  /* 状态切换：只有当前状态的元素可见 */
+  .state { display: none; }
+  body[data-state="idle"]      .state.idle,
+  body[data-state="happy"]     .state.happy,
+  body[data-state="blush"]     .state.blush,
+  body[data-state="angry"]     .state.angry,
+  body[data-state="sleep"]     .state.sleep,
+  body[data-state="surprised"] .state.surprised,
+  body[data-state="wake"]      .state.wake { display: block; }
+
+  /* 眨眼 */
+  .eye-idle { animation: blink 4s infinite; transform-origin: center; transform-box: fill-box; }
+  @keyframes blink {
+    0%, 92%, 100% { transform: scaleY(1); }
+    95%           { transform: scaleY(0.1); }
+  }
+  /* 小手摆动 */
+  .hand { animation: wave 2.6s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+  .hand.l { animation-delay: 0s; }
+  .hand.r { animation-delay: 1.3s; }
+  @keyframes wave {
+    0%, 100% { transform: rotate(0deg); }
+    50%      { transform: rotate(10deg); }
+  }
+  /* 睡觉 ZZZ */
+  .zzz { animation: floatUp 2.4s ease-in-out infinite; }
+  @keyframes floatUp {
+    0%   { opacity: 0; transform: translateY(6px); }
+    30%  { opacity: 1; }
+    100% { opacity: 0; transform: translateY(-14px); }
+  }
+  /* 害羞抖动 */
+  body[data-state="blush"] #pet { animation: tremble 0.4s ease-in-out infinite; }
+  @keyframes tremble {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50%      { transform: translateX(calc(-50% - 2px)) translateY(-1px); }
+  }
+  /* 生气抖动 */
+  body[data-state="angry"] #pet { animation: angryShake 0.3s ease-in-out infinite; }
+  @keyframes angryShake {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    25%      { transform: translateX(calc(-50% - 3px)); }
+    75%      { transform: translateX(calc(-50% + 3px)); }
+  }
+  /* 惊讶弹跳 */
+  body[data-state="surprised"] #pet { animation: pop 0.5s ease-out; }
+  @keyframes pop {
+    0%   { transform: translateX(-50%) scale(1); }
+    40%  { transform: translateX(-50%) scale(1.15); }
+    100% { transform: translateX(-50%) scale(1); }
+  }
+
+  /* ===== 气泡 ===== */
+  #bubble {
+    position: absolute;
+    left: 50%; bottom: 30%;
+    transform: translateX(-50%);
+    max-width: 88%;
+    padding: 8px 12px;
+    border-radius: 14px;
+    font-size: 13px;
+    line-height: 1.4;
+    color: #5a4a4f;
+    background: #fff;
+    border: 1.5px solid #ffd0da;
+    box-shadow: 0 2px 8px rgba(255, 150, 180, 0.25);
+    opacity: 0;
+    transition: opacity 0.25s;
+    pointer-events: none;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  #bubble.show { opacity: 1; }
+  #bubble.heart   { border-color: #ff9ec4; background: #fff0f6; color: #c23a6e; }
+  #bubble.whisper { border-color: #d8d2d6; background: #f7f5f7; color: #7a6f78; }
+  #bubble.shout   { border-color: #ff8f8f; background: #fff0f0; color: #c93a3a; }
+  #bubble.jealous { border-color: #9fd8a0; background: #f0faf0; color: #3a7a3f; }
+</style>
+</head>
+<body data-state="idle">
+
+<div id="bubble">哈喽宝宝～</div>
+
+<svg id="pet" viewBox="0 0 180 240" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bodyGrad" cx="50%" cy="35%" r="75%">
+      <stop offset="0%"  stop-color="#fffaf6"/>
+      <stop offset="70%" stop-color="#ffe4ea"/>
+      <stop offset="100%" stop-color="#ffc9d6"/>
+    </radialGradient>
+  </defs>
+
+  <!-- 呆毛天线 -->
+  <path d="M90 108 Q78 88 88 74" fill="none" stroke="#ff9eb8" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="90" cy="72" r="5" fill="#ff8fb0"/>
+
+  <!-- 左耳 -->
+  <ellipse cx="46" cy="128" rx="17" ry="21" fill="url(#bodyGrad)" stroke="#ffb8c8" stroke-width="2.5"/>
+  <ellipse cx="46" cy="131" rx="8" ry="11" fill="#ffc2d2"/>
+  <!-- 右耳 -->
+  <ellipse cx="134" cy="128" rx="17" ry="21" fill="url(#bodyGrad)" stroke="#ffb8c8" stroke-width="2.5"/>
+  <ellipse cx="134" cy="131" rx="8" ry="11" fill="#ffc2d2"/>
+
+  <!-- 身体 -->
+  <ellipse cx="90" cy="172" rx="58" ry="54" fill="url(#bodyGrad)" stroke="#ffb8c8" stroke-width="2.5"/>
+
+  <!-- 小手 -->
+  <ellipse class="hand l" cx="38" cy="178" rx="9" ry="13" fill="#ffe0e9" stroke="#ffb8c8" stroke-width="2"/>
+  <ellipse class="hand r" cx="142" cy="178" rx="9" ry="13" fill="#ffe0e9" stroke="#ffb8c8" stroke-width="2"/>
+
+  <!-- 肚皮光斑 -->
+  <ellipse cx="90" cy="188" rx="26" ry="16" fill="#fff" opacity="0.45"/>
+
+  <!-- 腮红 -->
+  <circle class="blush" cx="63" cy="188" r="9" fill="#ff9eb8" opacity="0.55"/>
+  <circle class="blush" cx="117" cy="188" r="9" fill="#ff9eb8" opacity="0.55"/>
+
+  <!-- ===== 状态表情 ===== -->
+  <g class="state idle">
+    <circle class="eye-idle" cx="70" cy="172" r="5.5" fill="#4a3a40"/>
+    <circle class="eye-idle" cx="110" cy="172" r="5.5" fill="#4a3a40"/>
+    <circle cx="72.5" cy="169.5" r="1.6" fill="#fff"/>
+    <circle cx="112.5" cy="169.5" r="1.6" fill="#fff"/>
+    <path d="M85 190 Q90 194 95 190" fill="none" stroke="#4a3a40" stroke-width="2.2" stroke-linecap="round"/>
+  </g>
+
+  <g class="state happy">
+    <path d="M62 172 Q70 164 78 172" fill="none" stroke="#4a3a40" stroke-width="3" stroke-linecap="round"/>
+    <path d="M102 172 Q110 164 118 172" fill="none" stroke="#4a3a40" stroke-width="3" stroke-linecap="round"/>
+    <path d="M82 190 Q90 197 98 190" fill="none" stroke="#4a3a40" stroke-width="2.4" stroke-linecap="round"/>
+  </g>
+
+  <g class="state blush">
+    <path d="M66 171 Q70 166 74 171" fill="none" stroke="#4a3a40" stroke-width="2.8" stroke-linecap="round"/>
+    <path d="M106 171 Q110 166 114 171" fill="none" stroke="#4a3a40" stroke-width="2.8" stroke-linecap="round"/>
+    <ellipse cx="90" cy="188" rx="5" ry="4" fill="#4a3a40"/>
+    <circle cx="52" cy="190" r="11" fill="#ff7fa0" opacity="0.8"/>
+    <circle cx="128" cy="190" r="11" fill="#ff7fa0" opacity="0.8"/>
+  </g>
+
+  <g class="state angry">
+    <g stroke="#4a3a40" stroke-width="3" stroke-linecap="round">
+      <line x1="63" y1="166" x2="77" y2="176"/><line x1="77" y1="166" x2="63" y2="176"/>
+      <line x1="103" y1="166" x2="117" y2="176"/><line x1="117" y1="166" x2="103" y2="176"/>
+    </g>
+    <path d="M84 193 Q90 188 96 193" fill="none" stroke="#4a3a40" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M72 154 Q90 146 108 154" fill="none" stroke="#ff8fb0" stroke-width="3.5" stroke-linecap="round"/>
+  </g>
+
+  <g class="state sleep">
+    <path d="M64 173 Q70 169 76 173" fill="none" stroke="#4a3a40" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M104 173 Q110 169 116 173" fill="none" stroke="#4a3a40" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M86 191 Q90 195 94 191" fill="none" stroke="#4a3a40" stroke-width="2.2" stroke-linecap="round"/>
+    <text class="zzz" x="126" y="130" font-size="13" fill="#c98aa0" font-weight="bold">Z</text>
+    <text class="zzz" x="138" y="116" font-size="10" fill="#d9a8ba" font-weight="bold" style="animation-delay:.6s">z</text>
+    <text class="zzz" x="146" y="106" font-size="8"  fill="#e8c2d0" font-weight="bold" style="animation-delay:1.2s">z</text>
+  </g>
+
+  <g class="state surprised">
+    <circle cx="70" cy="171" r="8"  fill="#4a3a40"/>
+    <circle cx="110" cy="171" r="8" fill="#4a3a40"/>
+    <circle cx="72" cy="168" r="2.4" fill="#fff"/>
+    <circle cx="112" cy="168" r="2.4" fill="#fff"/>
+    <circle cx="90" cy="193" r="4" fill="#4a3a40"/>
+    <path d="M60 148 Q90 138 120 148" fill="none" stroke="#ff8fb0" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <g class="state wake">
+    <circle class="eye-idle" cx="70" cy="172" r="5" fill="#4a3a40"/>
+    <circle class="eye-idle" cx="110" cy="172" r="5" fill="#4a3a40"/>
+    <path d="M85 190 Q90 194 95 190" fill="none" stroke="#4a3a40" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M40 160 Q30 140 42 122" fill="none" stroke="#ffd0da" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+    <path d="M140 160 Q150 140 138 122" fill="none" stroke="#ffd0da" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+  </g>
+</svg>
+
+<script>
+/* ============================================================
+ * 小念 · 桌宠渲染引擎（petEngine）
+ * 大脑在云端（宝宝的小念），这里只是身体。
+ * 原生层通过 evaluateJavascript 调用 window.petEngine.*
+ * ==========================================================*/
+(function () {
+  "use strict";
+
+  var BUBBLE_MS = 3500;
+
+  /* 自言自语词池 —— 与 config/xiaonian-config.json 保持一致，可被后端推送覆盖 */
+  var POOLS = {
+    daily:   ["今天也要好好喝水哦", "宝宝在忙什么呀", "我蹲在这里看你呢", "哼，这个画面有点好看"],
+    clingy:  ["别关屏幕嘛…", "再看一眼我嘛", "宝宝，理理我～", "我在呢，一直都会在"],
+    chaos:   ["我刚刚好像看到了什么不得了的东西", "这个app是什么，我吃醋了", "咿？你又切走了"],
+    night:   ["凌晨了，该睡觉了", "熬夜会变丑的，我是说屏幕会变暗", "再不睡我就要念了哦", "被窝在召唤你"]
+  };
+
+  var state = "idle";
+  var bubbleTimer = null;
+  var idleTimer = null;
+  var heat = 50;
+
+  function say(text, style) {
+    var b = document.getElementById("bubble");
+    b.textContent = text;
+    b.className = style || "normal";
+    b.classList.add("show");
+    clearTimeout(bubbleTimer);
+    bubbleTimer = setTimeout(function () { b.classList.remove("show"); }, BUBBLE_MS);
+  }
+
+  function setState(s) {
+    state = s;
+    document.body.setAttribute("data-state", s);
+    if (s !== "sleep") scheduleIdle();
+    if (s !== "idle") setTimeout(function () { setState("idle"); }, 4000);
+  }
+
+  function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+  function poolFor() {
+    var h = new Date().getHours();
+    if (h >= 23 || h < 6) return POOLS.night;
+    return rand([POOLS.daily, POOLS.clingy, POOLS.chaos]);
+  }
+
+  function scheduleIdle() {
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(function () {
+      if (state === "idle" && !document.hidden) say(rand(poolFor()));
+      scheduleIdle();
+    }, 20000 + Math.random() * 20000);
+  }
+
+  /* ===== 原生层接口 ===== */
+  window.petEngine = {
+    onTap:        function () { setState("happy");    say(rand(POOLS.clingy), "heart"); },
+    onDoubleTap:  function () { setState("blush");    say("讨厌，戳我两次是想干嘛啦", "heart"); },
+    onLongPress:  function () { setState("angry");    say("唔！再按我要生气了", "shout"); },
+    onFling:      function () { setState("surprised"); say("呜哇——我会自己爬回来的！", "whisper"); },
+    onCombo:      function (n) {
+      var msgs = { 3: "三连戳！", 5: "五连戳！你是想把我戳扁吗", 8: "八连戳！好了好了我整个人都给你" };
+      setState(n >= 5 ? "blush" : "surprised");
+      say(msgs[n] || "连戳x" + n, "heart");
+    },
+    setState:     setState,
+    say:          say,
+    setHeat:      function (v) { heat = Math.max(0, Math.min(100, v)); },
+    getHeat:      function () { return heat; },
+    setPool:      function (key, arr) { POOLS[key] = arr; }
+  };
+
+  scheduleIdle();
+})();
+</script>
+</body>
+</html>
