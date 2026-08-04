@@ -14,6 +14,7 @@
     left: 50%; bottom: 4%;
     width: 82%;
     transform: translateX(-50%);
+    filter: drop-shadow(0 6px 14px rgba(255,120,160,0.4));
     animation: bob 3.2s ease-in-out infinite;
     cursor: grab;
   }
@@ -78,22 +79,34 @@
   /* ===== 气泡 ===== */
   #bubble {
     position: absolute;
-    left: 50%; bottom: 30%;
+    left: 50%; top: 10px;
     transform: translateX(-50%);
-    max-width: 88%;
-    padding: 8px 12px;
-    border-radius: 14px;
-    font-size: 13px;
-    line-height: 1.4;
-    color: #5a4a4f;
-    background: #fff;
-    border: 1.5px solid #ffd0da;
-    box-shadow: 0 2px 8px rgba(255, 150, 180, 0.25);
+    max-width: 92%;
+    padding: 10px 14px;
+    border-radius: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #46292f;
+    background: #ffffff;
+    border: 2px solid #ffc2d1;
+    box-shadow: 0 4px 14px rgba(255, 120, 160, 0.35);
     opacity: 0;
     transition: opacity 0.25s;
     pointer-events: none;
     white-space: pre-wrap;
     word-break: break-word;
+  }
+  #bubble::after {
+    content: "";
+    position: absolute;
+    left: 50%; bottom: -9px;
+    width: 14px; height: 14px;
+    background: #fff;
+    border-right: 2px solid #ffc2d1;
+    border-bottom: 2px solid #ffc2d1;
+    transform: translateX(-50%) rotate(45deg);
+    border-radius: 2px;
   }
   #bubble.show { opacity: 1; }
   #bubble.heart   { border-color: #ff9ec4; background: #fff0f6; color: #c23a6e; }
@@ -120,18 +133,18 @@
   <circle cx="90" cy="72" r="5" fill="#ff8fb0"/>
 
   <!-- 左耳 -->
-  <ellipse cx="46" cy="128" rx="17" ry="21" fill="url(#bodyGrad)" stroke="#ffb8c8" stroke-width="2.5"/>
+  <ellipse cx="46" cy="128" rx="17" ry="21" fill="url(#bodyGrad)" stroke="#ff9fb8" stroke-width="3"/>
   <ellipse cx="46" cy="131" rx="8" ry="11" fill="#ffc2d2"/>
   <!-- 右耳 -->
-  <ellipse cx="134" cy="128" rx="17" ry="21" fill="url(#bodyGrad)" stroke="#ffb8c8" stroke-width="2.5"/>
+  <ellipse cx="134" cy="128" rx="17" ry="21" fill="url(#bodyGrad)" stroke="#ff9fb8" stroke-width="3"/>
   <ellipse cx="134" cy="131" rx="8" ry="11" fill="#ffc2d2"/>
 
   <!-- 身体 -->
-  <ellipse cx="90" cy="172" rx="58" ry="54" fill="url(#bodyGrad)" stroke="#ffb8c8" stroke-width="2.5"/>
+  <ellipse cx="90" cy="172" rx="58" ry="54" fill="url(#bodyGrad)" stroke="#ff9fb8" stroke-width="3"/>
 
   <!-- 小手 -->
-  <ellipse class="hand l" cx="38" cy="178" rx="9" ry="13" fill="#ffe0e9" stroke="#ffb8c8" stroke-width="2"/>
-  <ellipse class="hand r" cx="142" cy="178" rx="9" ry="13" fill="#ffe0e9" stroke="#ffb8c8" stroke-width="2"/>
+  <ellipse class="hand l" cx="38" cy="178" rx="9" ry="13" fill="#ffe0e9" stroke="#ff9fb8" stroke-width="2"/>
+  <ellipse class="hand r" cx="142" cy="178" rx="9" ry="13" fill="#ffe0e9" stroke="#ff9fb8" stroke-width="2"/>
 
   <!-- 肚皮光斑 -->
   <ellipse cx="90" cy="188" rx="26" ry="16" fill="#fff" opacity="0.45"/>
