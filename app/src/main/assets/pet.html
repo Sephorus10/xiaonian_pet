@@ -11,16 +11,15 @@
   /* ===== 小念本体 ===== */
   #pet {
     position: absolute;
-    left: 50%; bottom: 4%;
-    width: 82%;
-    transform: translateX(-50%);
+    left: 4%; bottom: 4%;
+    width: 54%;
     filter: drop-shadow(0 6px 14px rgba(255,120,160,0.4));
     animation: bob 3.2s ease-in-out infinite;
     cursor: grab;
   }
   @keyframes bob {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50%      { transform: translateX(-50%) translateY(-6px); }
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-6px); }
   }
   #pet:active { cursor: grabbing; }
 
@@ -58,33 +57,32 @@
   /* 害羞抖动 */
   body[data-state="blush"] #pet { animation: tremble 0.4s ease-in-out infinite; }
   @keyframes tremble {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50%      { transform: translateX(calc(-50% - 2px)) translateY(-1px); }
+    0%, 100% { transform: translate(0, 0); }
+    50%      { transform: translate(-2px, -1px); }
   }
   /* 生气抖动 */
   body[data-state="angry"] #pet { animation: angryShake 0.3s ease-in-out infinite; }
   @keyframes angryShake {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    25%      { transform: translateX(calc(-50% - 3px)); }
-    75%      { transform: translateX(calc(-50% + 3px)); }
+    0%, 100% { transform: translate(0, 0); }
+    25%      { transform: translate(-3px, 0); }
+    75%      { transform: translate(3px, 0); }
   }
   /* 惊讶弹跳 */
   body[data-state="surprised"] #pet { animation: pop 0.5s ease-out; }
   @keyframes pop {
-    0%   { transform: translateX(-50%) scale(1); }
-    40%  { transform: translateX(-50%) scale(1.15); }
-    100% { transform: translateX(-50%) scale(1); }
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.15); }
+    100% { transform: scale(1); }
   }
 
   /* ===== 气泡 ===== */
   #bubble {
     position: absolute;
-    left: 50%; top: 10px;
-    transform: translateX(-50%);
-    max-width: 92%;
-    padding: 10px 14px;
-    border-radius: 16px;
-    font-size: 16px;
+    right: 3px; bottom: 18%;
+    max-width: 38%;
+    padding: 8px 10px;
+    border-radius: 14px;
+    font-size: 14px;
     font-weight: 600;
     line-height: 1.5;
     color: #46292f;
@@ -100,12 +98,12 @@
   #bubble::after {
     content: "";
     position: absolute;
-    left: 50%; bottom: -9px;
+    right: -9px; top: 50%;
     width: 14px; height: 14px;
     background: #fff;
-    border-right: 2px solid #c9d4f2;
+    border-left: 2px solid #c9d4f2;
     border-bottom: 2px solid #c9d4f2;
-    transform: translateX(-50%) rotate(45deg);
+    transform: translateY(-50%) rotate(45deg);
     border-radius: 2px;
   }
   #bubble.show { opacity: 1; }
