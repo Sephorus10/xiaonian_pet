@@ -184,7 +184,7 @@ class OverlayService : Service() {
         tapCount++
         mainHandler.removeCallbacks(tapWindowRunnable)
         mainHandler.postDelayed(tapWindowRunnable, 2000)
-        if (tapCount == 3 || tapCount == 5 || tapCount == 8) {
+        if (tapCount == 3L || tapCount == 5L || tapCount == 8L) {
             jsCall("onCombo", tapCount.toString())
             sync?.reportGesture("combo_$tapCount", currentAppPackage())
             tapCount = 0
@@ -238,7 +238,7 @@ class OverlayService : Service() {
         val stage = thresholds.indexOfLast { idleMin >= it }
         if (stage > lonelinessStage) {
             lonelinessStage = stage
-            val key = thresholds[stage].toString()
+            val key = thresholds[stage]
             val reaction = config?.lonelinessAt(key)
             if (reaction != null) {
                 jsSetState(reaction.optString("state", "idle"))
