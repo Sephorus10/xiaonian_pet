@@ -109,7 +109,7 @@ class OverlayService : Service() {
     private fun setupOverlay() {
         wm = getSystemService(WINDOW_SERVICE) as WindowManager
         params = WindowManager.LayoutParams(
-            dp(180), dp(240),
+            dp(220), dp(320),
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             PixelFormat.TRANSLUCENT
