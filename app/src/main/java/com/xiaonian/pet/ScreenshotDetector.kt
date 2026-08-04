@@ -1,5 +1,6 @@
 package com.xiaonian.pet
 
+import android.content.Context
 import android.os.FileObserver
 import android.os.Handler
 import android.os.Looper
@@ -18,15 +19,12 @@ class ScreenshotDetector(
     private var observer: FileObserver? = null
 
     fun start() {
+        val pictures = android.os.Environment.getExternalStoragePublicDirectory(
+            android.os.Environment.DIRECTORY_PICTURES)
         val dirs = listOf(
-            File(context.getExternalFilesDir(null), "").parentFile?.let {
-                File(it.parentFile, "Pictures/Screenshots")
-            },
-            File(android.os.Environment.getExternalStoragePublicDirectory(
-                android.os.Environment.DIRECTORY_PICTURES), "Screenshots"),
-            File(android.os.Environment.getExternalStoragePublicDirectory(
-                android.os.Environment.DIRECTORY_PICTURES))
-        ).filterNotNull().filter { it.exists() }
+            File(pictures, "Screenshots"),
+            pictures
+        ).filter { it.exists() }
 
         if (dirs.isEmpty()) return
         val dir = dirs.first()
